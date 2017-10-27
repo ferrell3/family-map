@@ -1,0 +1,160 @@
+package models;
+
+
+/**
+ * The event class represents an event object in the database
+ */
+public class event {
+
+    //FIELDS-----------------
+
+    /**
+     * Unique identifier for this event (non-empty string)
+     */
+    private String eventId;
+
+    /**
+     * User (Username) to which this person belongs
+     */
+    private String descendant;
+
+    /**
+     * ID of person to which this event belongs
+     */
+    private String personId;
+
+    /**
+     * Latitude of event’s location
+     */
+    private double latitude;
+
+    /**
+     * Longitude of event’s location
+     */
+    private double longitude;
+
+    /**
+     * Country in which event occurred
+     */
+    private String country;
+
+    /**
+     * City in which event occurred
+     */
+    private String city;
+
+    /**
+     * Type of event (birth, baptism, christening, marriage, death, etc.)
+     */
+    private String eventType;
+
+    /**
+     * Year in which event occurred
+     */
+    private String year;
+
+    //METHODS--------------
+
+    /**
+     * Default empty constructor
+     */
+    public event(){}
+
+    public event(String des, String eID, String pID, double lat, double longit, String country, String city, String type, String year)
+    {
+        this.descendant = des;
+        this.eventId = eID;
+        this.personId = pID;
+        this.latitude = lat;
+        this.longitude = longit;
+        this.country = country;
+        this.city = city;
+        this.eventType = type;
+        this.year = year;
+    }
+
+    public boolean equals(event e)
+    {
+        return this.descendant.equals(e.descendant) &&
+        this.eventId.equals(e.eventId) &&
+        this.personId.equals(e.personId) &&
+        this.latitude == e.latitude &&
+        this.longitude == e.longitude &&
+        this.country.equals(e.country) &&
+        this.city.equals(e.city) &&
+        this.eventType.equals(e.eventType) &&
+        this.year.equals(e.year);
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getDescendant() {
+        return descendant;
+    }
+
+    public void setDescendant(String descendant) {
+        this.descendant = descendant;
+    }
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String person) {
+        this.personId = person;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String  getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+}
