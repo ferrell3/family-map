@@ -23,7 +23,8 @@ public class eventDAO {
             final String driver = "org.sqlite.JDBC";
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.print(e.getMessage());
+            //e.printStackTrace();
         }
     }
 
@@ -37,6 +38,7 @@ public class eventDAO {
         }catch (SQLException e)
         {
             System.out.println("openConnection failed");
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         return connection;
@@ -83,6 +85,7 @@ public class eventDAO {
         {
             //System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.out.println("closeConnection failed");
+            System.out.print(e.getMessage());
             //e.printStackTrace();
             return false;
         }
@@ -93,8 +96,9 @@ public class eventDAO {
      * @param e the event to be inserted
      * @return String message indicating success or failure
      */
-    public String createEvent(event e)
+    public boolean createEvent(event e)
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -113,21 +117,25 @@ public class eventDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Event added.";
         }catch (SQLException ex)
         {
+            status = false;
             closeConnection(false);
             message = "Create event failed.";
+            System.out.print(ex.getMessage());
             //ex.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
 
-    public String createTable()
+    public boolean createTable()
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -145,20 +153,24 @@ public class eventDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Events table created.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Create events table failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
-    public String dropTable()
+    public boolean dropTable()
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -168,32 +180,35 @@ public class eventDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Events table dropped.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Drop events table failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
 
     /**
      * Gets the event object with the specified ID
-     * @param eventId the specified ID
+     * @param eventID the specified ID
      * @return the event with the specified ID
      */
-    public event getEvent(String eventId)
+    public event getEvent(String eventID)
     {
         event e = new event();
         try {
             connection = openConnection();
             String query = "SELECT * FROM events WHERE event_id = ? ";
             stmt = connection.prepareStatement(query);
-            stmt.setString(1, eventId);
+            stmt.setString(1, eventID);
             results = stmt.executeQuery();
             while (results.next())
             {
@@ -208,15 +223,18 @@ public class eventDAO {
                 e.setYear(results.getString(9));
 
                 //print event
-                System.out.printf("descendant: %s  eventID: %s  person: %s  lat: %f  long: %f  country: %s  city: %s  event type: %s  year: %s\n", e.getDescendant(), e.getEventId(), e.getPersonId(), e.getLatitude(), e.getLongitude(), e.getCountry(), e.getCity(), e.getEventType(), e.getYear());
+                //System.out.printf("descendant: %s  eventID: %s  person: %s  lat: %f  long: %f  country: %s  city: %s  event type: %s  year: %s\n", e.getDescendant(), e.getEventId(), e.getPersonId(), e.getLatitude(), e.getLongitude(), e.getCountry(), e.getCity(), e.getEventType(), e.getYear());
             }
 
             stmt.close();
+            e.setValid(true);
             closeConnection(true);
         }catch (SQLException ex)
         {
             closeConnection(false);
-            System.out.println("Get event failed.");
+            e.setValid(false);
+//            System.out.println("Get event failed.");
+//            System.out.println(ex.getMessage());
             //ex.printStackTrace();
         }
 
@@ -246,7 +264,7 @@ public class eventDAO {
                 e.setYear(results.getString(9));
                 events.add(e);
 
-                System.out.printf("descendant: %s  eventID: %s  person: %s  lat: %f  long: %f  country: %s  city: %s  event type: %s  year: %s\n", e.getDescendant(), e.getEventId(), e.getPersonId(), e.getLatitude(), e.getLongitude(), e.getCountry(), e.getCity(), e.getEventType(), e.getYear());
+                //System.out.printf("descendant: %s  eventID: %s  person: %s  lat: %f  long: %f  country: %s  city: %s  event type: %s  year: %s\n", e.getDescendant(), e.getEventId(), e.getPersonId(), e.getLatitude(), e.getLongitude(), e.getCountry(), e.getCity(), e.getEventType(), e.getYear());
             }
 
             stmt.close();
@@ -254,11 +272,40 @@ public class eventDAO {
         }catch (SQLException ex)
         {
             closeConnection(false);
-            System.out.println("Get events failed.");
+//            System.out.println("Get events failed.");
+//            System.out.print(ex.getMessage());
             //ex.printStackTrace();
         }
 
         return events.toArray(new event[events.size()]);
         //return events;
+    }
+
+    public boolean deleteEvent(String username)
+    {
+        boolean status;
+        String message;
+        try {
+            connection = openConnection();
+
+            String deleteEvent = "DELETE FROM events WHERE descendant = ?";
+            stmt = connection.prepareStatement(deleteEvent);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+            stmt.close();
+
+            status = true;
+            closeConnection(true);
+            message = "Event deleted.";
+        }catch (SQLException e)
+        {
+            status = false;
+            closeConnection(false);
+            message = "Delete event failed.";
+            System.out.print(e.getMessage());
+            //e.printStackTrace();
+        }
+        //System.out.println(message);
+        return status;
     }
 }

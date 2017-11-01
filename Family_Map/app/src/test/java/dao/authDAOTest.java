@@ -60,4 +60,9 @@ public class authDAOTest {
         assertTrue(auth2.equals(a.getAuth(auth2.getToken())));
     }
 
+    @Test
+    public void deleteAuth() throws Exception {
+        a.createAuth(new auth("this is an authToken", "johnny"));
+        assertTrue(a.deleteAuth("johnny"));
+    }
 }

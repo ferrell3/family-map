@@ -21,7 +21,7 @@ public class response {
     /**
      *  Non-empty string containing the Person ID of the user’s generated Person object
      */
-    private String personId;
+    private String personID;
 
 
     /**
@@ -48,7 +48,7 @@ public class response {
     public response(String user, String token, String pid){
         this.username = user;
         this.authToken = token;
-        this.personId = pid;
+        this.personID= pid;
     }
 
     /**
@@ -77,11 +77,11 @@ public class response {
     }
 
     public String getPersonId() {
-        return personId;
+        return personID;
     }
 
-    public void setPersonId(String personId) {
-        this.personId = personId;
+    public void setPersonId(String personID) {
+        this.personID= personID;
     }
 
     public String getMessage() {

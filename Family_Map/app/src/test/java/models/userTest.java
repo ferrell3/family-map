@@ -19,7 +19,7 @@ public class userTest {
     @Test
     public void testGetters()
     {
-        assertEquals("chipper", u.getUsername());
+        assertEquals("chipper", u.getUserName());
         assertEquals("shinyteeth", u.getPassword());
         assertEquals("chippy@gmail.com", u.getEmail());
         assertEquals("Chip", u.getFirstName());
@@ -32,8 +32,8 @@ public class userTest {
     public void testSetters()
     {
 
-        u1.setUsername("kipper");
-        assertEquals("kipper", u1.getUsername());
+        u1.setUserName("kipper");
+        assertEquals("kipper", u1.getUserName());
 
         u1.setPassword("shiny");
         assertEquals("shiny", u1.getPassword());

@@ -7,7 +7,7 @@ public class eventResponse {
     /**
      * Unique identifier for this event (non-empty string)
      */
-    private String eventId;
+    private String eventID;
 
     /**
      * User (Username) to which this person belongs
@@ -17,7 +17,7 @@ public class eventResponse {
     /**
      * ID of person to which this event belongs
      */
-    private String personId;
+    private String personID;
 
     /**
      * Latitude of event’s location
@@ -60,11 +60,11 @@ public class eventResponse {
     public eventResponse() {}
 
     public String getEventId() {
-        return eventId;
+        return eventID;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void setEventId(String eventID) {
+        this.eventID = eventID;
     }
 
     public String getDescendant() {
@@ -76,11 +76,11 @@ public class eventResponse {
     }
 
     public String getPersonId() {
-        return personId;
+        return personID;
     }
 
-    public void setPersonId(String personId) {
-        this.personId = personId;
+    public void setPersonId(String personID) {
+        this.personID = personID;
     }
 
     public double getLatitude() {

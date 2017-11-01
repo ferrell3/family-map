@@ -23,7 +23,8 @@ public class userDAO {
             final String driver = "org.sqlite.JDBC";
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.print(e.getMessage());
         }
     }
 
@@ -37,27 +38,12 @@ public class userDAO {
         }catch (SQLException e)
         {
             System.out.println("openConnection failed");
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         return connection;
     }
 
-//    public Connection openConnection(String name) //throws SQLException
-//    {
-//        try{
-//            StringBuilder db = new StringBuilder("jdbc:sqlite:");
-//            db.append(name);
-//            final String DBNAME = db.toString();
-//            connection = DriverManager.getConnection(DBNAME); // throws SQLException
-//            //System.out.println("Connection established");
-//            connection.setAutoCommit(false);
-//        }catch (SQLException e)
-//        {
-//            System.out.println("openConnection failed");
-//            //e.printStackTrace();
-//        }
-//        return connection;
-//    }
 
     public boolean closeConnection(boolean commit)
     {
@@ -82,14 +68,15 @@ public class userDAO {
         }catch (SQLException e)
         {
             System.out.println("closeConnection failed");
+            System.out.print(e.getMessage());
             //e.printStackTrace();
             return false;
         }
     }
 
-    public String createTable() // return Success or Error String? Or message saying already exists?
+    public boolean createTable() // return Success or Error String? Or message saying already exists?
     {
-        //boolean result = false;
+        boolean result;
         String message;
         try {
             connection = openConnection();
@@ -107,20 +94,24 @@ public class userDAO {
             stmt.close();
 
             closeConnection(true);
+            result = true;
             message = "Users table created.";
         }catch (SQLException e)
         {
             closeConnection(false);
             message = "Create users table failed.";
+            result = false;
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
-        //return result;
+        //return message;
+        return result;
     }
 
-    public String dropTable()
+    public boolean dropTable()
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -131,15 +122,19 @@ public class userDAO {
             stmt.close();
 
             closeConnection(true);
+            status = true;
             message = "Users table dropped.";
         }catch (SQLException e)
         {
             closeConnection(false);
             message = "Drop users table failed.";
+            status = false;
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        //return message;
+        return status;
     }
 
 
@@ -148,15 +143,16 @@ public class userDAO {
      * @param u The user to be added to the database
      * @return String message indicating success or failure
      */
-    public String createUser(user u)
+    public boolean createUser(user u)
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
 
             String createUser = "INSERT INTO users VALUES ( ?, ?, ?, ?, ?, ?, ? ) ";
             stmt = connection.prepareStatement(createUser);
-            stmt.setString(1, u.getUsername());
+            stmt.setString(1, u.getUserName());
             stmt.setString(2, u.getPassword());
             stmt.setString(3, u.getEmail());
             stmt.setString(4, u.getFirstName());
@@ -166,16 +162,19 @@ public class userDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "User added.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Create user failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
 
@@ -193,7 +192,7 @@ public class userDAO {
             stmt = connection.prepareStatement(query);
             stmt.setString(1, username);
             results = stmt.executeQuery();
-            u.setUsername(results.getString(1));
+            u.setUserName(results.getString(1));
             u.setPassword(results.getString(2));
             u.setEmail(results.getString(3));
             u.setFirstName(results.getString(4));
@@ -201,16 +200,46 @@ public class userDAO {
             u.setGender(results.getString(6));
             u.setPersonId(results.getString(7));
 
-            System.out.printf("username: %s  password: %s  email: %s  first name: %s  last name: %s  gender: %s  personID: %s\n", u.getUsername(), u.getPassword(), u.getEmail(), u.getFirstName(), u.getLastName(), u.getGender(), u.getPersonId());
+            //System.out.printf("username: %s  password: %s  email: %s  first name: %s  last name: %s  gender: %s  personID: %s\n", u.getUserName(), u.getPassword(), u.getEmail(), u.getFirstName(), u.getLastName(), u.getGender(), u.getPersonId());
 
             stmt.close();
             closeConnection(true);
+            u.setValid(true);
         }catch (SQLException e)
         {
             closeConnection(false);
-            System.out.println("Get user failed.");
+            u.setValid(false);
+            //System.out.println(e.getMessage());
             //e.printStackTrace();
         }
         return u;
+    }
+
+    public boolean deleteUser(String username)
+    {
+        boolean status;
+        String message;
+        try {
+            connection = openConnection();
+
+            String deleteUser = "DELETE FROM users WHERE username = ?";
+            stmt = connection.prepareStatement(deleteUser);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+            stmt.close();
+
+            status = true;
+            closeConnection(true);
+            message = "User deleted.";
+        }catch (SQLException e)
+        {
+            status = false;
+            closeConnection(false);
+            message = "Delete user failed.";
+            System.out.print(e.getMessage());
+            //e.printStackTrace();
+        }
+        //System.out.println(message);
+        return status;
     }
 }

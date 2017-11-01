@@ -29,7 +29,7 @@ public class allEventsResponse {
     }
 
     public void setData(event[] data) {
-        this.data = data;
+        this.data = data.clone();
     }
 
     public String getMessage() {
@@ -38,5 +38,18 @@ public class allEventsResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String toString()
+    {
+        StringBuilder out = new StringBuilder();
+        if(data.length != 0)
+        {
+            for(event e : data)
+            {
+                out.append(e.toString() + "\n");
+            }
+        }
+        return out.toString();
     }
 }

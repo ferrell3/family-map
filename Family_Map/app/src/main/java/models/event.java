@@ -11,7 +11,7 @@ public class event {
     /**
      * Unique identifier for this event (non-empty string)
      */
-    private String eventId;
+    private String eventID;
 
     /**
      * User (Username) to which this person belongs
@@ -21,7 +21,7 @@ public class event {
     /**
      * ID of person to which this event belongs
      */
-    private String personId;
+    private String personID;
 
     /**
      * Latitude of event’s location
@@ -53,6 +53,8 @@ public class event {
      */
     private String year;
 
+    private boolean valid;
+
     //METHODS--------------
 
     /**
@@ -63,8 +65,8 @@ public class event {
     public event(String des, String eID, String pID, double lat, double longit, String country, String city, String type, String year)
     {
         this.descendant = des;
-        this.eventId = eID;
-        this.personId = pID;
+        this.eventID = eID;
+        this.personID = pID;
         this.latitude = lat;
         this.longitude = longit;
         this.country = country;
@@ -76,8 +78,8 @@ public class event {
     public boolean equals(event e)
     {
         return this.descendant.equals(e.descendant) &&
-        this.eventId.equals(e.eventId) &&
-        this.personId.equals(e.personId) &&
+        this.eventID.equals(e.eventID) &&
+        this.personID.equals(e.personID) &&
         this.latitude == e.latitude &&
         this.longitude == e.longitude &&
         this.country.equals(e.country) &&
@@ -86,12 +88,16 @@ public class event {
         this.year.equals(e.year);
     }
 
+    public boolean isValid() { return valid; }
+
+    public void setValid(boolean bool) { this.valid = bool; }
+
     public String getEventId() {
-        return eventId;
+        return eventID;
     }
 
     public void setEventId(String eventId) {
-        this.eventId = eventId;
+        this.eventID = eventId;
     }
 
     public String getDescendant() {
@@ -103,11 +109,11 @@ public class event {
     }
 
     public String getPersonId() {
-        return personId;
+        return personID;
     }
 
     public void setPersonId(String person) {
-        this.personId = person;
+        this.personID = person;
     }
 
     public double getLatitude() {
@@ -156,5 +162,13 @@ public class event {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public String toString()
+    {
+        StringBuilder out = new StringBuilder();
+        out.append("descendant: " + descendant + "\neventID: " + eventID + "\npersonID: " + personID + "\nlatitude: " + latitude
+        + "\nlongitude: " + longitude + "\ncountry: " + country + "\ncity: " + city + "\neventType: " + eventType + "\nyear: " + year);
+        return out.toString();
     }
 }

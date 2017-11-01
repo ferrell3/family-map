@@ -77,4 +77,9 @@ public class personDAOTest {
         assertTrue(mom.equals(people[2]));
     }
 
+    @Test
+    public void deletePerson() throws Exception {
+        p.createPerson(new person("johnny", "personID", "first", "last", "m", "father", "mother", "spouse"));
+        assertTrue(p.deletePerson("johnny"));
+    }
 }

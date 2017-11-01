@@ -8,7 +8,7 @@ public class person {
     /**
      * Unique identifier for this person (non-empty string)
      */
-    private String personId;
+    private String personID;
 
     /**
      * User (Username) to which this person belongs
@@ -33,17 +33,19 @@ public class person {
     /**
      *  ID of person’s father (possibly null)
      */
-    private String father;
+    private String father; // = "";
 
     /**
      * ID of person’s mother (possibly null)
      */
-    private String mother;
+    private String mother; // = "";
 
     /**
      * ID of person’s spouse (possibly null)
      */
-    private String spouse;
+    private String spouse; // = "";
+
+    private boolean valid;
 
     /**
     * Default empty constructor
@@ -54,7 +56,7 @@ public class person {
     public person(String descendant, String personId, String first, String last, String gen, String pa, String ma, String spouse)
     {
         this.descendant = descendant;
-        this.personId = personId;
+        this.personID = personId;
         this.firstName = first;
         this.lastName = last;
         this.gender = gen;
@@ -66,7 +68,7 @@ public class person {
     public boolean equals(person p)
     {
         return this.descendant.equals(p.descendant) &&
-        this.personId.equals(p.personId) &&
+        this.personID.equals(p.personID) &&
         this.firstName.equals(p.firstName) &&
         this.lastName.equals(p.lastName) &&
         this.gender.equals(p.gender) &&
@@ -75,13 +77,16 @@ public class person {
         this.spouse.equals(p.spouse);
     }
 
+    public boolean isValid() { return valid; }
+
+    public void setValid(boolean bool) { this.valid = bool; }
 
     public String getPersonId() {
-        return personId;
+        return personID;
     }
 
     public void setPersonId(String personId) {
-        this.personId = personId;
+        this.personID = personId;
     }
 
     public String getDescendant() {
@@ -138,5 +143,14 @@ public class person {
 
     public void setSpouse(String spouse) {
         this.spouse = spouse;
+    }
+
+    public String toString()
+    {
+        StringBuilder out = new StringBuilder();
+        out.append("descendant: " + descendant + "\npersonID: " + personID + "\nfirstName: "
+                + firstName + "\nlastName: " + lastName + "\ngender: " + gender + "\nfather: "
+                + father + "\nmother: " + mother + "\nspouse: " + spouse);
+        return out.toString();
     }
 }

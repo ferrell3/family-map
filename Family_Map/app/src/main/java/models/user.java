@@ -8,7 +8,7 @@ public class user {
     /**
      * Unique user name (non-empty string)
      */
-    private String username;
+    private String userName;
 
     /**
      * User's password
@@ -38,7 +38,9 @@ public class user {
     /**
      * Unique Person ID assigned to this user
      */
-    private String personId;
+    private String personID;
+
+    private boolean valid;
 
     /**
      * Default empty constructor
@@ -46,37 +48,47 @@ public class user {
     public user(){
     }
 
-    public user(String username, String pass, String email, String first, String last, String gender, String pid)
+    public user(String userName, String pass, String email, String first, String last, String gender, String pid)
     {
-        this.username = username;
+        this.userName = userName;
         this.password = pass;
         this.email = email;
         this.firstName = first;
         this.lastName = last;
         this.gender = gender;
-        this.personId = pid;
+        this.personID = pid;
     }
 
     public boolean equals(user u)
     {
-        if( this.username.equals(u.username) &&
+        if( this.userName.equals(u.userName) &&
                 this.password.equals(u.password) &&
                 this.email.equals(u.email) &&
                 this.firstName.equals(u.firstName) &&
                 this.lastName.equals(u.lastName) &&
                 this.gender.equals(u.gender) &&
-                this.personId.equals(u.personId)) {
+                this.personID.equals(u.personID)) {
             return true;
         }
         else return false;
     }
 
-    public String getUsername() {
-        return username;
+    public boolean isValid()
+    {
+        return valid;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setValid(boolean bool)
+    {
+        valid = bool;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -120,10 +132,10 @@ public class user {
     }
 
     public String getPersonId() {
-        return personId;
+        return personID;
     }
 
     public void setPersonId(String personId) {
-        this.personId = personId;
+        this.personID = personId;
     }
 }

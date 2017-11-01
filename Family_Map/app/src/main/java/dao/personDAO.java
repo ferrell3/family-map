@@ -91,8 +91,9 @@ public class personDAO {
      * @param p The person object to be added
      * @return String message indicating success or failure
      */
-    public String createPerson(person p) //, String username)
+    public boolean createPerson(person p) //, String username)
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -112,18 +113,22 @@ public class personDAO {
 
             closeConnection(true);
             message = "Person added.";
+            status = true;
         }catch (SQLException e)
         {
             closeConnection(false);
             message = "Create person failed.";
+            status = false;
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
-    public String createTable()
+    public boolean createTable()
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -141,20 +146,24 @@ public class personDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Persons table created.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Create persons table failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
-    public String dropTable()
+    public boolean dropTable()
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -164,32 +173,35 @@ public class personDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Persons table dropped.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Drop persons table failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
 
     /**
      * Gets the person object with the specified ID
-     * @param personId The ID of the person to get
+     * @param personID The ID of the person to get
      * @return The person object with the specified ID
      */
-    public person getPerson(String personId) //SINGLE person
+    public person getPerson(String personID) //SINGLE person
     {
         person p = new person();
         try {
             connection = openConnection();
             String query = "SELECT * FROM persons WHERE person_id = ? ";
             stmt = connection.prepareStatement(query);
-            stmt.setString(1,personId);
+            stmt.setString(1,personID);
             results = stmt.executeQuery();
             while (results.next())
             {
@@ -203,15 +215,17 @@ public class personDAO {
                 p.setSpouse(results.getString(8));
 
                 //print person
-                System.out.printf("descendant: %s  personID: %s  first name: %s  last name: %s  gender: %s  father: %s  mother: %s  spouse: %s\n", p.getDescendant(), p.getPersonId(), p.getFirstName(), p.getLastName(), p.getGender(), p.getFather(), p.getMother(), p.getSpouse());
+                //System.out.printf("descendant: %s  personID: %s  first name: %s  last name: %s  gender: %s  father: %s  mother: %s  spouse: %s\n", p.getDescendant(), p.getPersonId(), p.getFirstName(), p.getLastName(), p.getGender(), p.getFather(), p.getMother(), p.getSpouse());
             }
-
+            p.setValid(true);
             stmt.close();
             closeConnection(true);
         }catch (SQLException e)
         {
             closeConnection(false);
-            System.out.println("Get person failed.");
+            p.setValid(false);
+            //System.out.println("Get person failed.");
+            //System.out.println(e.getMessage());
             //e.printStackTrace();
         }
 
@@ -240,19 +254,48 @@ public class personDAO {
                 people.add(p);
 
                 //print person
-                System.out.printf("descendant: %s  personID: %s  first name: %s  last name: %s  gender: %s  father: %s  mother: %s  spouse: %s\n", p.getDescendant(), p.getPersonId(), p.getFirstName(), p.getLastName(), p.getGender(), p.getFather(), p.getMother(), p.getSpouse());
+                //System.out.printf("descendant: %s  personID: %s  first name: %s  last name: %s  gender: %s  father: %s  mother: %s  spouse: %s\n", p.getDescendant(), p.getPersonId(), p.getFirstName(), p.getLastName(), p.getGender(), p.getFather(), p.getMother(), p.getSpouse());
             }
 
             stmt.close();
             closeConnection(true);
         } catch (SQLException e) {
             closeConnection(false);
-            System.out.println("Get people failed.");
+            //System.out.println("Get people failed.");
+            //System.out.print(e.getMessage());
             //e.printStackTrace();
         }
 
         //person[] peeps = people.toArray(new person[people.size()]);
         return people.toArray(new person[people.size()]);
         //return people;
+    }
+
+    public boolean deletePerson(String username)
+    {
+        boolean status;
+        String message;
+        try {
+            connection = openConnection();
+
+            String deletePerson = "DELETE FROM persons WHERE descendant = ?";
+            stmt = connection.prepareStatement(deletePerson);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+            stmt.close();
+
+            status = true;
+            closeConnection(true);
+            message = "Person deleted.";
+        }catch (SQLException e)
+        {
+            status = false;
+            closeConnection(false);
+            message = "Delete person failed.";
+            System.out.print(e.getMessage());
+            //e.printStackTrace();
+        }
+        //System.out.println(message);
+        return status;
     }
 }

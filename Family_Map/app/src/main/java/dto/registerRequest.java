@@ -37,10 +37,10 @@ public class registerRequest {
 
     //vvvvvvvvvvv FOR LOADREQUEST vvvvvvvvvvvvv
     /**
-     * String containing the user's assigned personId
+     * String containing the user's assigned personID
      * (For use with load request)
      */
-    private String personId;
+    private String personID;
 
 
     /**
@@ -77,7 +77,7 @@ public class registerRequest {
      * @param first User's first name
      * @param last User's last name
      * @param gender User's gender
-     * @param pid personId User's associated Person ID
+     * @param pid personID User's associated Person ID
      */
     public registerRequest(String user, String pass, String email,
                            String first, String last, String gender, String pid) {
@@ -87,7 +87,7 @@ public class registerRequest {
         this.firstName = first;
         this.lastName = last;
         this.gender = gender;
-        this.personId = pid;
+        this.personID = pid;
     }
 
     public String getUsername() {
@@ -139,10 +139,10 @@ public class registerRequest {
     }
 
     public String getPersonId() {
-        return personId;
+        return personID;
     }
 
-    public void setPersonId(String personId) {
-        this.personId = personId;
+    public void setPersonId(String personID) {
+        this.personID = personID;
     }
 }

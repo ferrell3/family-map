@@ -7,7 +7,7 @@ public class personResponse {
     /**
      * Unique identifier for this person (non-empty string)
      */
-    private String personId;
+    private String personID;
 
     /**
      * User (Username) to which this person belongs
@@ -56,11 +56,11 @@ public class personResponse {
     }
 
     public String getPersonId() {
-        return personId;
+        return personID;
     }
 
-    public void setPersonId(String personId) {
-        this.personId = personId;
+    public void setPersonId(String personID) {
+        this.personID = personID;
     }
 
     public String getDescendant() {

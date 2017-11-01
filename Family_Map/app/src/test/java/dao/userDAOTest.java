@@ -61,7 +61,12 @@ public class userDAOTest {
     @Test
     public void getUser() throws Exception {
         u.createUser(user2);            //assertEquals("User added.", u.createUser(user2));
-        assertTrue(user2.equals(u.getUser(user2.getUsername())));
+        assertTrue(user2.equals(u.getUser(user2.getUserName())));
     }
 
+    @Test
+    public void deleteUser() throws Exception {
+        u.createUser(new user("johnny", "password", "email", "first", "last", "m", "personID"));
+        assertTrue(u.deleteUser("johnny"));
+    }
 }

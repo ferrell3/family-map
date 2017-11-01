@@ -1,7 +1,7 @@
 package data;
 
 
-public class lastNames {
+public class surnameData {
     String[] data;
 
     public String[] getData(){

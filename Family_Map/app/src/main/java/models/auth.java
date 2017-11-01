@@ -15,6 +15,8 @@ public class auth {
      */
     private String user;
 
+    private boolean valid;
+
     //methods
 
     /**
@@ -33,7 +35,9 @@ public class auth {
         return (this.token.equals(a.token) && this.user.equals(a.user));
     }
 
-    //GETTERS AND SETTERS
+    public boolean isValid() { return valid; }
+
+    public void setValid(boolean bool) { this.valid = bool; }
 
     public String getToken() {
         return token;

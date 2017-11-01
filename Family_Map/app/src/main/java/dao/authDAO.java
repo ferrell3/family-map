@@ -17,7 +17,8 @@ public class authDAO {
             final String driver = "org.sqlite.JDBC";
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.print(e.getMessage());
+            //e.printStackTrace();
         }
     }
 
@@ -31,27 +32,11 @@ public class authDAO {
         }catch (SQLException e)
         {
             System.out.println("openConnection failed");
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         return connection;
     }
-
-//    public Connection openConnection(String name) //throws SQLException
-//    {
-//        try{
-//            StringBuilder db = new StringBuilder("jdbc:sqlite:");
-//            db.append(name);
-//            final String DBNAME = db.toString();
-//            connection = DriverManager.getConnection(DBNAME); // throws SQLException
-//            //System.out.println("Connection established");
-//            connection.setAutoCommit(false);
-//        }catch (SQLException e)
-//        {
-//            System.out.println("openConnection failed");
-//            //e.printStackTrace();
-//        }
-//        return connection;
-//    }
 
     public boolean closeConnection(boolean commit)
     {
@@ -76,13 +61,15 @@ public class authDAO {
         }catch (SQLException e)
         {
             System.out.println("closeConnection failed");
+            System.out.print(e.getMessage());
             //e.printStackTrace();
             return false;
         }
     }
 
-    public String createTable()
+    public boolean createTable()
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -94,20 +81,24 @@ public class authDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Auth table created.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Create auth table failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
-    public String dropTable()
+    public boolean dropTable()
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -117,16 +108,19 @@ public class authDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Auth table dropped.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Drop auth table failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
 
@@ -135,8 +129,9 @@ public class authDAO {
      * @param a The auth object to be added
      * @return String message indicating success or failure
      */
-    public String createAuth(auth a)
+    public boolean createAuth(auth a)
     {
+        boolean status;
         String message;
         try {
             connection = openConnection();
@@ -147,16 +142,19 @@ public class authDAO {
             stmt.executeUpdate();
             stmt.close();
 
+            status = true;
             closeConnection(true);
             message = "Auth added.";
         }catch (SQLException e)
         {
+            status = false;
             closeConnection(false);
             message = "Create auth failed.";
+            System.out.print(e.getMessage());
             //e.printStackTrace();
         }
         //System.out.println(message);
-        return message;
+        return status;
     }
 
 
@@ -172,16 +170,46 @@ public class authDAO {
             a.setToken(results.getString(1));
             a.setUser(results.getString(2));
 
-            System.out.printf("username: %s  token: %s \n", a.getUser(), a.getToken());
-
+            //System.out.printf("username: %s  token: %s \n", a.getUser(), a.getToken());
+            a.setValid(true);
             stmt.close();
             closeConnection(true);
         }catch (SQLException e)
         {
             closeConnection(false);
-            System.out.println("Get auth failed.");
+            a.setValid(false);
+//            System.out.println("Get auth failed.");
+//            System.out.println(e.getMessage());
             //e.printStackTrace();
         }
         return a;
+    }
+
+    public boolean deleteAuth(String username)
+    {
+        boolean status;
+        String message;
+        try {
+            connection = openConnection();
+
+            String deleteAuth = "DELETE FROM auth WHERE user = ?";
+            stmt = connection.prepareStatement(deleteAuth);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+            stmt.close();
+
+            status = true;
+            closeConnection(true);
+            message = "Auth deleted.";
+        }catch (SQLException e)
+        {
+            status = false;
+            closeConnection(false);
+            message = "Delete auth failed.";
+            System.out.print(e.getMessage());
+            //e.printStackTrace();
+        }
+        //System.out.println(message);
+        return status;
     }
 }

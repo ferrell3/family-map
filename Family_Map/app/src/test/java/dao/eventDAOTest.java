@@ -77,4 +77,10 @@ public class eventDAOTest {
         assertTrue(e3.equals(events[2]));
     }
 
+    @Test
+    public void deleteEvent() throws Exception {
+        e.createEvent(new event("johnny", "eventID", "personID", 12.653, -54.258, "country", "city", "eventType", "year"));
+        assertTrue(e.deleteEvent("johnny"));
+    }
+
 }
