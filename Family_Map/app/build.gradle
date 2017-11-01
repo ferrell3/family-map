@@ -29,4 +29,5 @@ dependencies {
     compile project(':sqlite-jdbc-3.7.2')
     compile project(':json-20160212')
     compile project(':gson-2.6.2')
+    compile project(':http-20070405')
 }
