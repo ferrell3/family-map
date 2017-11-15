@@ -3,10 +3,14 @@ package fma.familymapapp;
 import android.util.Log;
 
 import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -49,32 +53,52 @@ public class HttpClient {
 
     }
 
-    public void post(String urlAdress, Login l)
+    public void post(String urlAdress, Login login) //change to String gson instead of login so I can post anything
     {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
+            System.out.println(urlAdress);
             URL url = new URL(urlAdress);
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Accept","application/json");
             conn.setDoOutput(true);
-            conn.setDoInput(true);
+            conn.connect();
 
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("username", l.getUsername());
-            jsonParam.put("password", l.getPassword());
+            String reqData = gson.toJson(login);
 
-            Log.i("JSON", jsonParam.toString());
-            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-            os.writeBytes(jsonParam.toString());
+            OutputStream reqBody = conn.getOutputStream();
 
-            os.flush();
-            os.close();
+            OutputStreamWriter sw = new OutputStreamWriter(reqBody);
+            sw.write(reqData);
+            sw.flush();
 
-            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-            Log.i("MSG" , conn.getResponseMessage());
+            reqBody.close();
 
-            conn.disconnect();
+            if(conn.getResponseCode() == HttpURLConnection.HTTP_OK)
+            {
+                System.out.println("Success.");
+            }
+            else
+            {
+                System.out.println("ERROR: " + conn.getResponseMessage());
+            }
+
+//            JSONObject jsonParam = new JSONObject();
+//            jsonParam.put("username", login.getUsername());
+//            jsonParam.put("password", login.getPassword());
+//
+//            Log.i("JSON", jsonParam.toString());
+//            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+//            os.writeBytes(jsonParam.toString());
+//
+//            os.flush();
+//            os.close();
+
+//            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+//            Log.i("MSG" , conn.getResponseMessage());
+
+//            conn.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }

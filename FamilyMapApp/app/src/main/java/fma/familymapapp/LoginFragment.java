@@ -26,6 +26,9 @@ public class LoginFragment extends Fragment {
     private boolean mFilledEmail;
     private boolean mFilledGender;
     private Login mLogin;
+    private Register mRegister;
+    private String mServerHost;
+    private String mServerPort;
     private EditText mHost;
     private EditText mPort;
     private EditText mUsername;
@@ -47,6 +50,7 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLogin = new Login();
+        mRegister = new Register();
         setRetainInstance(true);
 
     }
@@ -68,7 +72,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
-                mLogin.setHost(s.toString());
+                mServerHost = s.toString();
+//                mLogin.setHost(s.toString());
                 enableSignIn();
                 enableRegister();
             }
@@ -90,7 +95,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
-                mLogin.setPort(s.toString());
+                mServerPort = s.toString();
+                //mLogin.setPort(s.toString());
                 enableSignIn();
                 enableRegister();
             }
@@ -113,6 +119,7 @@ public class LoginFragment extends Fragment {
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
                 mLogin.setUsername(s.toString());
+                mRegister.setUsername(s.toString());
                 enableSignIn();
                 enableRegister();
             }
@@ -135,6 +142,7 @@ public class LoginFragment extends Fragment {
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
                 mLogin.setPassword(s.toString());
+                mRegister.setPassword(s.toString());
                 enableSignIn();
                 enableRegister();
             }
@@ -156,7 +164,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
-                mLogin.setFirstName(s.toString());
+                mRegister.setFirstName(s.toString());
                 enableRegister();
             }
 
@@ -177,7 +185,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
-                mLogin.setLastName(s.toString());
+                mRegister.setLastName(s.toString());
                 enableRegister();
             }
 
@@ -198,7 +206,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onTextChanged(
                     CharSequence s, int start, int before, int count) {
-                mLogin.setEmail(s.toString());
+                mRegister.setEmail(s.toString());
                 enableRegister();
             }
 
@@ -215,7 +223,7 @@ public class LoginFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
-                    mLogin.setGender("m");
+                    mRegister.setGender("m");
                     enableRegister();
                     printLogin();
                 }
@@ -228,7 +236,7 @@ public class LoginFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
-                    mLogin.setGender("f");
+                    mRegister.setGender("f");
                     enableRegister();
                     printLogin();
                 }
@@ -252,6 +260,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
+                new FetchItemsTask().execute();
                 //fill in functionality later
             }
         });
@@ -263,28 +272,22 @@ public class LoginFragment extends Fragment {
     private class FetchItemsTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            String url = mLogin.getHost() + ":" + mLogin.getPort() + "/user/login"; // + mLogin.getUsername() + "/2";
+
+            String url = "http://" + mServerHost + ":" + mServerPort + "/user/login"; // + mLogin.getUsername() + "/2";
             HttpClient httpClient = new HttpClient();
-//            HttpPost httpPost = new HttpPost();
             httpClient.post(url, mLogin);
-//            try {
-//                String result = new ServerFetcher().getUrlString(url);
-//                Log.i(TAG, "Fetched contents of URL: " + result);
-//            } catch (IOException ioe) {
-//                Log.e(TAG, "Failed to fetch URL: ", ioe);
-//            }
             return null;
         }
     }
 
     private void enableSignIn()
     {
-        if(mLogin.getHost() != null
-                && mLogin.getPort() != null
+        if(mServerHost != null
+                && mServerPort != null
                 && mLogin.getUsername() != null
                 && mLogin.getPassword() != null) {
-            if(mLogin.getHost().equals("")
-                    || mLogin.getPort().equals("")
+            if(mServerHost.equals("")
+                    || mServerPort.equals("")
                     || mLogin.getUsername().equals("")
                     || mLogin.getPassword().equals(""))
             {
@@ -303,24 +306,24 @@ public class LoginFragment extends Fragment {
 
     private void enableRegister()
     {
-        if(mLogin.getHost() != null
-                && mLogin.getPort() != null
-                && mLogin.getUsername() != null
-                && mLogin.getPassword() != null
-                && mLogin.getFirstName() != null
-                && mLogin.getLastName() != null
-                && mLogin.getEmail() != null
-                && mLogin.getGender() != null) {
+        if(mServerHost != null
+                && mServerPort != null
+                && mRegister.getUsername() != null
+                && mRegister.getPassword() != null
+                && mRegister.getFirstName() != null
+                && mRegister.getLastName() != null
+                && mRegister.getEmail() != null
+                && mRegister.getGender() != null) {
 
             //check if a value was erased
-            if (mLogin.getHost().equals("")
-                    || mLogin.getPort().equals("")
-                    || mLogin.getUsername().equals("")
-                    || mLogin.getPassword().equals("")
-                    || mLogin.getFirstName().equals("")
-                    || mLogin.getLastName().equals("")
-                    || mLogin.getEmail().equals("")
-                    || mLogin.getGender().equals("")) {
+            if (mServerHost.equals("")
+                    || mServerPort.equals("")
+                    || mRegister.getUsername().equals("")
+                    || mRegister.getPassword().equals("")
+                    || mRegister.getFirstName().equals("")
+                    || mRegister.getLastName().equals("")
+                    || mRegister.getEmail().equals("")
+                    || mRegister.getGender().equals("")) {
                 mRegisterButton.setEnabled(false); //if a value was erased
             }
             else
@@ -334,13 +337,13 @@ public class LoginFragment extends Fragment {
     }
 
     private void printLogin(){
-        System.out.println("Host: " + mLogin.getHost());
-        System.out.println("Port: " + mLogin.getPort());
-        System.out.println("Username: " + mLogin.getUsername());
-        System.out.println("Password: " + mLogin.getPassword());
-        System.out.println("First Name: " + mLogin.getFirstName());
-        System.out.println("Last Name: " + mLogin.getLastName());
-        System.out.println("Email: " + mLogin.getEmail());
-        System.out.println("Gender: " + mLogin.getGender());
+        System.out.println("Host: " + mServerHost);
+        System.out.println("Port: " + mServerPort);
+        System.out.println("Username: " + mRegister.getUsername());
+        System.out.println("Password: " + mRegister.getPassword());
+        System.out.println("First Name: " + mRegister.getFirstName());
+        System.out.println("Last Name: " + mRegister.getLastName());
+        System.out.println("Email: " + mRegister.getEmail());
+        System.out.println("Gender: " + mRegister.getGender());
     }
 }
