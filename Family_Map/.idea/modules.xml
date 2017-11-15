@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/http-20070405/http-20070405.iml" filepath="$PROJECT_DIR$/http-20070405/http-20070405.iml" />
       <module fileurl="file://$PROJECT_DIR$/json-20160212/json-20160212.iml" filepath="$PROJECT_DIR$/json-20160212/json-20160212.iml" />
       <module fileurl="file://$PROJECT_DIR$/junit-4.12/junit-4.12.iml" filepath="$PROJECT_DIR$/junit-4.12/junit-4.12.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />
       <module fileurl="file://$PROJECT_DIR$/sqlite-jdbc-3.7.2/sqlite-jdbc-3.7.2.iml" filepath="$PROJECT_DIR$/sqlite-jdbc-3.7.2/sqlite-jdbc-3.7.2.iml" />
     </modules>
   </component>
